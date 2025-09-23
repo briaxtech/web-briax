@@ -1,209 +1,222 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Phone, PhoneCall, Mic, MicOff, X } from "lucide-react"
+import { Textarea } from "@/components/ui/textarea"
+import { Loader2, MessageCircle, Send, Sparkles, X } from "lucide-react"
+
+type ChatMessage = {
+  id: string
+  role: "user" | "assistant"
+  content: string
+}
 
 export function VoiceChatbot() {
-  const [isActive, setIsActive] = useState(false)
-  const [isListening, setIsListening] = useState(false)
-  const [inCall, setInCall] = useState(false)
-  const [isConnecting, setIsConnecting] = useState(false)
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [inputValue, setInputValue] = useState("")
+  const [isSending, setIsSending] = useState(false)
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      id: "assistant-welcome",
+      role: "assistant",
+      content: "Hola, soy BrIAx. Deja tu mensaje y te muestro como guiaria a tus leads.",
+    },
+  ])
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const pendingReplyRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    const existingScript = document.querySelector('script[src*="elevenlabs"]')
-
-    if (!existingScript) {
-      const script = document.createElement("script")
-      script.src = "https://unpkg.com/@elevenlabs/convai-widget-embed"
-      script.async = true
-      script.type = "text/javascript"
-
-      script.onload = () => {
-        console.log("[v0] ElevenLabs script loaded successfully")
-        setIsScriptLoaded(true)
+    return () => {
+      if (pendingReplyRef.current) {
+        clearTimeout(pendingReplyRef.current)
       }
-
-      script.onerror = (error) => {
-        console.error("[v0] Error loading ElevenLabs script:", error)
-      }
-
-      document.head.appendChild(script)
-
-      return () => {
-        if (document.head.contains(script)) {
-          document.head.removeChild(script)
-        }
-      }
-    } else {
-      setIsScriptLoaded(true)
     }
   }, [])
 
-  const startCall = () => {
-    console.log("[v0] Starting ElevenLabs ConvAI call")
-    setIsConnecting(true)
+  useEffect(() => {
+    if (!isOpen) return
+    const element = scrollContainerRef.current
+    if (!element) return
+    element.scrollTo({ top: element.scrollHeight, behavior: "smooth" })
+  }, [messages, isOpen])
 
-    if (containerRef.current) {
-      containerRef.current.innerHTML = `
-        <elevenlabs-convai 
-          agent-id="agent_8101k1zxg6xsepdah05pwq04ksx2"
-          style="width: 100%; height: 100%; border: none; border-radius: 8px;">
-        </elevenlabs-convai>
-      `
+  const handleToggle = () => {
+    setIsOpen((prev) => !prev)
+  }
 
-      setTimeout(() => {
-        setInCall(true)
-        setIsListening(true)
-        setIsConnecting(false)
-        console.log("[v0] ElevenLabs ConvAI widget loaded")
-      }, 1500)
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    sendMessage()
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault()
+      sendMessage()
     }
   }
 
-  const leaveCall = () => {
-    console.log("[v0] Ending ElevenLabs ConvAI call")
-    if (containerRef.current) {
-      containerRef.current.innerHTML = ""
-    }
-    setInCall(false)
-    setIsListening(false)
-    setIsConnecting(false)
-  }
+  const sendMessage = () => {
+    const trimmed = inputValue.trim()
+    if (!trimmed || isSending) return
 
-  const toggleChatbot = () => {
-    if (!isActive) {
-      setIsActive(true)
-    } else {
-      setIsActive(false)
-      leaveCall()
+    const userMessage: ChatMessage = {
+      id: `user-${Date.now()}`,
+      role: "user",
+      content: trimmed,
     }
+    const placeholderId = `assistant-${Date.now()}`
+
+    setMessages((prev) => [
+      ...prev,
+      userMessage,
+      {
+        id: placeholderId,
+        role: "assistant",
+        content: "BrIAx esta preparando una respuesta...",
+      },
+    ])
+    setInputValue("")
+    setIsSending(true)
+
+    const simulatedReply = "Aqui iria la respuesta de tu agente. Integra tu API en sendMessage para completar el flujo."
+
+    if (pendingReplyRef.current) {
+      clearTimeout(pendingReplyRef.current)
+    }
+
+    pendingReplyRef.current = setTimeout(() => {
+      setMessages((prev) =>
+        prev.map((message) =>
+          message.id === placeholderId
+            ? {
+                ...message,
+                content: simulatedReply,
+              }
+            : message,
+        ),
+      )
+      setIsSending(false)
+    }, 800)
   }
 
   return (
     <div className="fixed bottom-3 right-3 md:bottom-4 md:right-4 lg:bottom-6 lg:right-6 z-50">
       <AnimatePresence>
-        {isActive && (
+        {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.8 }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.8 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="mb-2 md:mb-3 bg-white/95 backdrop-blur-sm rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl border border-gray-200/50 overflow-hidden max-w-[280px] sm:max-w-[320px] md:max-w-[360px]"
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="mb-2 md:mb-3 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/70 border border-border/60 shadow-xl md:shadow-2xl rounded-2xl w-[320px] sm:w-[360px] md:w-[380px]"
           >
-            <div className="px-3 py-2 md:px-4 md:py-2 lg:px-6 lg:py-3 flex items-center justify-between bg-gradient-to-r from-blue-500 to-purple-600">
-              <div className="flex items-center gap-2 md:gap-3">
+            <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary to-primary/70 text-primary-foreground rounded-t-2xl">
+              <div className="flex items-center gap-2">
                 <motion.div
-                  animate={{ rotate: isListening ? 360 : 0 }}
-                  transition={{ duration: 2, repeat: isListening ? Number.POSITIVE_INFINITY : 0, ease: "linear" }}
-                  className="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                  className="w-8 h-8 bg-white/15 rounded-full flex items-center justify-center"
                 >
-                  <span className="text-white text-[10px] md:text-xs font-bold">IA</span>
+                  <Sparkles className="h-4 w-4" />
                 </motion.div>
-                <div className="flex items-center gap-1 md:gap-2 min-w-0">
-                  <motion.div
-                    animate={{ scale: isListening ? [1, 1.2, 1] : 1 }}
-                    transition={{ duration: 1, repeat: isListening ? Number.POSITIVE_INFINITY : 0 }}
-                  >
-                    {isListening ? (
-                      <Mic className="h-3 w-3 md:h-4 md:w-4 text-white" />
-                    ) : (
-                      <MicOff className="h-3 w-3 md:h-4 md:w-4 text-white" />
-                    )}
-                  </motion.div>
-                  <span className="text-white font-medium text-[11px] md:text-xs lg:text-sm truncate">
-                    {inCall
-                      ? isListening
-                        ? "BrIAx te escucha..."
-                        : "Conectado con BrIAx"
-                      : isConnecting
-                        ? "Conectando..."
-                        : "Listo para conectar"}
-                  </span>
+                <div className="leading-tight">
+                  <p className="text-sm font-semibold">BrIAx - Chat IA</p>
+                  <p className="text-xs text-white/80">Listo para conversar</p>
                 </div>
               </div>
               <Button
-                onClick={() => setIsActive(false)}
-                size="sm"
+                size="icon"
                 variant="ghost"
-                className="h-6 w-6 p-0 text-white hover:bg-white/20"
+                className="h-8 w-8 text-primary-foreground hover:bg-white/20"
+                onClick={handleToggle}
               >
-                <X className="h-3 w-3" />
+                <X className="h-4 w-4" />
               </Button>
             </div>
 
-            <div className="p-2 md:p-3">
-              <div
-                ref={containerRef}
-                className="w-full min-h-[200px] md:min-h-[250px] bg-gray-100 rounded-lg flex items-center justify-center"
-              >
-                {!inCall && !isConnecting && (
-                  <div className="text-center text-gray-500 text-sm">
-                    <Phone className="w-8 h-8 mx-auto mb-2 text-blue-500" />
-                    Haz clic para hablar con BrIAx
-                  </div>
-                )}
-                {isConnecting && (
-                  <div className="text-center text-gray-500 text-sm">
-                    <div className="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-2"></div>
-                    Conectando con BrIAx...
+            <div className="px-4 pb-4 pt-3 space-y-3">
+              <div ref={scrollContainerRef} className="max-h-[320px] overflow-y-auto pr-1">
+                <div className="space-y-3">
+                  {messages.map((message) => (
+                    <div
+                      key={message.id}
+                      className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                    >
+                      <div
+                        className={`rounded-2xl px-4 py-3 text-sm shadow-sm max-w-[85%] ${
+                          message.role === "user"
+                            ? "bg-primary text-primary-foreground rounded-br-sm"
+                            : "bg-muted text-muted-foreground rounded-bl-sm"
+                        }`}
+                      >
+                        {message.content}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {isSending && (
+                  <div className="flex justify-start pt-1">
+                    <div className="bg-muted/80 text-muted-foreground rounded-2xl rounded-bl-sm px-4 py-3 text-sm shadow-sm">
+                      BrIAx esta pensando...
+                    </div>
                   </div>
                 )}
               </div>
 
-              <div className="flex justify-center gap-2 mt-2">
-                {inCall ? (
-                  <Button onClick={leaveCall} size="sm" className="bg-red-500 hover:bg-red-600 text-white">
-                    <PhoneCall className="h-3 w-3 mr-1" />
-                    Terminar llamada
+              <form onSubmit={handleSubmit} className="space-y-2">
+                <Textarea
+                  value={inputValue}
+                  onChange={(event) => setInputValue(event.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Escribe tu mensaje..."
+                  rows={3}
+                  className="min-h-[96px] resize-none"
+                />
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] text-muted-foreground">
+                    Enter para enviar | Shift + Enter para salto de linea
+                  </p>
+                  <Button type="submit" size="sm" disabled={!inputValue.trim() || isSending}>
+                    {isSending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Enviando
+                      </>
+                    ) : (
+                      <>
+                        <Send className="mr-2 h-4 w-4" />
+                        Enviar
+                      </>
+                    )}
                   </Button>
-                ) : (
-                  <Button
-                    onClick={startCall}
-                    disabled={isConnecting || !isScriptLoaded}
-                    size="sm"
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white disabled:opacity-50"
-                  >
-                    <Phone className="h-3 w-3 mr-1" />
-                    {!isScriptLoaded ? "Cargando..." : isConnecting ? "Conectando..." : "Hablar con BrIAx"}
-                  </Button>
-                )}
+                </div>
+              </form>
+
+              <div className="rounded-xl border border-dashed border-border/60 bg-muted/30 text-xs text-muted-foreground px-3 py-2">
+                Conecta tu endpoint de IA en `sendMessage` para usar respuestas reales.
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} transition={{ duration: 0.2 }}>
+      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
         <Button
-          onClick={toggleChatbot}
+          onClick={handleToggle}
           size="lg"
-          className={`rounded-full w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 shadow-xl md:shadow-2xl transition-all duration-300 ${
-            isActive
-              ? "bg-red-500 hover:bg-red-600"
-              : "bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+          className={`rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 shadow-xl transition-all duration-300 ${
+            isOpen
+              ? "bg-primary text-primary-foreground hover:bg-primary/90"
+              : "bg-gradient-to-br from-primary to-primary/70 text-primary-foreground hover:from-primary/90 hover:to-primary"
           }`}
         >
-          <motion.div animate={{ rotate: isActive ? 180 : 0 }} transition={{ duration: 0.3 }}>
-            {isActive ? (
-              <PhoneCall className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 lg:h-6 lg:w-6 text-white" />
-            ) : (
-              <Phone className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 lg:h-6 lg:w-6 text-white" />
-            )}
+          <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
+            <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
           </motion.div>
         </Button>
       </motion.div>
-
-      {!isActive && (
-        <motion.div
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-          className="absolute -top-0.5 -right-0.5 md:-top-1 md:-right-1 lg:-top-2 lg:-right-2 w-2 h-2 md:w-3 md:h-3 lg:w-4 lg:h-4 bg-green-500 rounded-full"
-        />
-      )}
     </div>
   )
 }

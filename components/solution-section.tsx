@@ -3,7 +3,7 @@ import { ArrowRight, Sparkles } from "lucide-react"
 
 export function SolutionSection() {
   return (
-    <section className="py-20 bg-gradient-to-r from-primary/10 via-background to-primary/5">
+    <section id="solucion" className="py-20 bg-gradient-to-r from-primary/10 via-background to-primary/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-5xl font-bold mb-6 text-balance">

@@ -3,7 +3,7 @@ import { Play, ArrowRight } from "lucide-react"
 
 export function ExamplesSection() {
   return (
-    <section className="py-20">
+    <section id="casos" className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold mb-6">Ejemplos reales de lo que hará tu agente IA</h2>

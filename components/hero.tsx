@@ -3,7 +3,7 @@ import { ArrowRight, Bot, Clock, Target } from "lucide-react"
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10 py-8 md:py-12 lg:py-20">
+    <section id="inicio" className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10 py-8 md:py-12 lg:py-20">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />
 

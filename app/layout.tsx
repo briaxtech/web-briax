@@ -4,11 +4,12 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
+import { Header } from "@/components/header"
 import "./globals.css"
 
 export const metadata: Metadata = {
   title: "BrIAx - Agente de Ventas IA",
-  description: "Vende más sin ampliar tu equipo comercial con BrIAx, tu agente de ventas con inteligencia artificial",
+  description: "Vende mas sin ampliar tu equipo comercial con BrIAx, tu agente de ventas con inteligencia artificial",
   generator: "v0.app",
 }
 
@@ -21,7 +22,10 @@ export default function RootLayout({
     <html lang="es">
       <head></head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <Suspense fallback={null}>{children}</Suspense>
+        <Header />
+        <Suspense fallback={null}>
+          <div className="pt-20 md:pt-24 lg:pt-28">{children}</div>
+        </Suspense>
         <Analytics />
       </body>
     </html>
