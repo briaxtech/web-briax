@@ -110,7 +110,7 @@ export function VoiceChatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="mb-2 md:mb-3 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/70 border border-border/60 shadow-xl md:shadow-2xl rounded-2xl w-[320px] sm:w-[360px] md:w-[380px]"
+            className="mb-2 md:mb-3 bg-background backdrop-blur supports-[backdrop-filter]:bg-background/70 border border-border/60 shadow-xl md:shadow-2xl rounded-2xl w-[320px] sm:w-[360px] md:w-[380px]"
           >
             <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary to-primary/70 text-primary-foreground rounded-t-2xl">
               <div className="flex items-center gap-2">

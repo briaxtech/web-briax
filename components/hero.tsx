@@ -3,7 +3,7 @@ import { ArrowRight, Bot, Clock, Target } from "lucide-react"
 
 export function Hero() {
   return (
-    <section id="inicio" className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10 py-8 md:py-12 lg:py-20">
+    <section id="inicio" className="relative scroll-mt-24 overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10 pt-24 md:pt-28 lg:pt-32 pb-8 md:pb-12 lg:pb-20">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />
 
@@ -12,7 +12,7 @@ export function Hero() {
           <img
             src="/briax-logo.png"
             alt="BrIAx - Agentes IA Comerciales"
-            className="h-16 sm:h-20 md:h-24 lg:h-28 w-auto"
+            className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto"
           />
         </div>
 

@@ -2,7 +2,7 @@ import { AlertTriangle, Clock, DollarSign } from "lucide-react"
 
 export function ProblemSection() {
   return (
-    <section id="problema" className="py-20 bg-muted/30">
+    <section id="problema" className="scroll-mt-24 py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-5xl font-bold mb-6 text-balance">

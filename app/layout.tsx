@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <Header />
         <Suspense fallback={null}>
-          <div className="pt-20 md:pt-24 lg:pt-28">{children}</div>
+          <main>{children}</main>
         </Suspense>
         <Analytics />
       </body>

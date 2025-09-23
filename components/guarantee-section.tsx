@@ -3,7 +3,7 @@ import { Shield, ArrowRight } from "lucide-react"
 
 export function GuaranteeSection() {
   return (
-    <section id="garantia" className="py-20 bg-gradient-to-r from-primary/10 via-background to-primary/5">
+    <section id="garantia" className="scroll-mt-24 py-20 bg-gradient-to-r from-primary/10 via-background to-primary/5">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-12">
