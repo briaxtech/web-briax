@@ -19,7 +19,7 @@ export function Hero() {
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="space-y-6 md:space-y-8">
             <div className="space-y-4 md:space-y-6">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-balance leading-tight">
+              <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-balance leading-tight">
                 <span className="text-foreground">Vende más</span> <span className="text-primary">sin ampliar</span>{" "}
                 <span className="text-foreground">tu equipo comercial</span>
               </h1>
