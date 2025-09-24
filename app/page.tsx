@@ -7,7 +7,7 @@ import { ExamplesSection } from "@/components/examples-section"
 import { GuaranteeSection } from "@/components/guarantee-section"
 import { FAQSection } from "@/components/faq-section"
 import { Footer } from "@/components/footer"
-import { VoiceChatbot } from "@/components/voice-chatbot"
+import { ElevenLabsVoiceAgent } from "@/components/elevenlabs-voice-agent"
 
 export default function Home() {
   return (
@@ -23,7 +23,9 @@ export default function Home() {
         <FAQSection />
       </main>
       <Footer />
-      <VoiceChatbot />
+      <ElevenLabsVoiceAgent />
     </div>
   )
 }
+
+

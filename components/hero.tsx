@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Bot, Clock, Target } from "lucide-react"
+import { ArrowRight, Clock, Mic, Target } from "lucide-react"
 
 export function Hero() {
   return (
@@ -20,12 +20,13 @@ export function Hero() {
           <div className="space-y-6 md:space-y-8">
             <div className="space-y-4 md:space-y-6">
               <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-balance leading-tight">
-                <span className="text-foreground">Vende más</span> <span className="text-primary">sin ampliar</span>{" "}
-                <span className="text-foreground">tu equipo comercial</span>
+                <span className="text-foreground">Tu agente de voz IA</span>{" "}
+                <span className="text-primary">conversa y vende</span>{" "}
+                <span className="text-foreground">sin ampliar tu equipo</span>
               </h1>
 
               <p className="text-lg sm:text-xl md:text-xl lg:text-2xl text-muted-foreground text-pretty leading-relaxed">
-                Creamos tu agente IA que atiende 24/7, filtra curiosos y agenda solo clientes listos para comprar.
+                Entregamos un asistente de voz que atiende 24/7, responde dudas y agenda reuniones con leads listos para comprar.
               </p>
             </div>
 
@@ -41,22 +42,22 @@ export function Hero() {
                 </a>
               </Button>
               <p className="text-xs md:text-sm text-muted-foreground text-center sm:text-left">
-                Para tener mi agente IA que venda por mi
+                Para lanzar mi agente de voz que venda por mi
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 pt-2 md:pt-4">
               <div className="flex items-center gap-2">
-                <Bot className="h-4 w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
-                <span className="text-xs md:text-sm font-medium">100% Automatizado</span>
+                <Mic className="h-4 w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
+                <span className="text-xs md:text-sm font-medium">Voz natural en tiempo real</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
-                <span className="text-xs md:text-sm font-medium">Atiende 24/7</span>
+                <span className="text-xs md:text-sm font-medium">Atiende 24/7 por voz</span>
               </div>
               <div className="flex items-center gap-2">
                 <Target className="h-4 w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
-                <span className="text-xs md:text-sm font-medium">Solo Leads Calificados</span>
+                <span className="text-xs md:text-sm font-medium">Convierte llamadas en ventas</span>
               </div>
             </div>
           </div>
@@ -65,20 +66,20 @@ export function Hero() {
             <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl md:shadow-2xl">
               <img
                 src="/ai-agents-working-commercial-interfaces.png"
-                alt="Agentes IA trabajando con interfaces comerciales - Schedule Meeting, AutoGPT, Personal AI"
+                alt="Agente de voz IA gestionando conversaciones comerciales"
                 className="w-full h-auto"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent" />
             </div>
 
             <div className="absolute -bottom-3 -left-3 md:-bottom-6 md:-left-6 bg-card border border-border rounded-lg md:rounded-xl p-2 md:p-4 shadow-lg">
-              <div className="text-lg md:text-2xl font-bold text-primary">+300%</div>
-              <div className="text-xs md:text-sm text-muted-foreground">Conversión</div>
+              <div className="text-lg md:text-2xl font-bold text-primary">+65%</div>
+              <div className="text-xs md:text-sm text-muted-foreground">Citas confirmadas</div>
             </div>
 
             <div className="absolute -top-3 -right-3 md:-top-6 md:-right-6 bg-card border border-border rounded-lg md:rounded-xl p-2 md:p-4 shadow-lg">
               <div className="text-lg md:text-2xl font-bold text-primary">24/7</div>
-              <div className="text-xs md:text-sm text-muted-foreground">Disponible</div>
+              <div className="text-xs md:text-sm text-muted-foreground">Disponible por voz</div>
             </div>
           </div>
         </div>
