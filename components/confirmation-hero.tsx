@@ -1,9 +1,16 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { CheckCircle, Calendar } from "lucide-react"
 
 export function ConfirmationHero() {
+  const router = useRouter()
+
+  const handleGoToForm = () => {
+    router.push("/formulario")
+  }
+
   return (
     <section className="py-20 px-4">
       <div className="container max-w-4xl mx-auto text-center">
@@ -16,8 +23,7 @@ export function ConfirmationHero() {
         </h1>
 
         <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
-          Gracias por reservar tu espacio. En la fecha y hora elegida vas a hablar con alguien de nuestro equipo
-          comercial.
+          Gracias por reservar tu espacio. En la fecha y hora elegida vas a hablar con alguien de nuestro equipo comercial.
         </p>
 
         <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 mb-8">
@@ -28,7 +34,7 @@ export function ConfirmationHero() {
         <Button
           size="lg"
           className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3"
-          onClick={() => window.open("https://calendly.com/brian-niwoyda/30min", "_blank")}
+          onClick={handleGoToForm}
         >
           <Calendar className="mr-2 h-5 w-5" />
           Ver mi cita programada

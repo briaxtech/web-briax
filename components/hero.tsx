@@ -1,7 +1,16 @@
+"use client"
+
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Clock, Mic, Target } from "lucide-react"
 
 export function Hero() {
+  const router = useRouter()
+
+  const handleGoToForm = () => {
+    router.push("/formulario")
+  }
+
   return (
     <section id="inicio" className="relative scroll-mt-24 overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10 pt-24 md:pt-28 lg:pt-32 pb-8 md:pb-12 lg:pb-20">
       {/* Background decoration */}
@@ -34,12 +43,10 @@ export function Hero() {
               <Button
                 size="lg"
                 className="text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-6 group w-full sm:w-auto"
-                asChild
+                onClick={handleGoToForm}
               >
-                <a href="https://calendly.com/brian-niwoyda/30min" target="_blank" rel="noopener noreferrer">
-                  Quiero agendar llamada
-                  <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" />
-                </a>
+                QUIERO AGENDAR UNA LLAMADA
+                <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <p className="text-xs md:text-sm text-muted-foreground text-center sm:text-left">
                 Para lanzar mi agente de voz que venda por mi

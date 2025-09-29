@@ -1,14 +1,22 @@
+"use client"
+
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Sparkles } from "lucide-react"
 
 export function SolutionSection() {
+  const router = useRouter()
+
+  const handleGoToForm = () => {
+    router.push("/formulario")
+  }
+
   return (
     <section id="solucion" className="scroll-mt-24 py-20 bg-gradient-to-r from-primary/10 via-background to-primary/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-5xl font-bold mb-6 text-balance">
-            <span className="text-primary">Conviertes tus campañas en ventas de lujo</span> sin ampliar tu equipo ni
-            perder tiempo
+            <span className="text-primary">Conviertes tus campanas en ventas de lujo</span> sin ampliar tu equipo ni perder tiempo
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
             En BrIAx creamos tu agente IA Comercial
@@ -18,7 +26,7 @@ export function SolutionSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold">Así es como quedaría..</h3>
+              <h3 className="text-2xl font-bold">Asi es como quedaria...</h3>
               <p className="text-lg text-muted-foreground">Este es un ejemplo de como seria tu agente</p>
             </div>
 
@@ -51,16 +59,17 @@ export function SolutionSection() {
 
             <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-6">
               <p className="text-lg font-semibold text-center">
-                Si contratarías más personal, gastarías al menos:{" "}
-                <span className="text-2xl text-destructive font-bold">5000€</span>
+                Si contratarias mas personal, gastarias al menos: <span className="text-2xl text-destructive font-bold">5.000 </span>
               </p>
             </div>
 
-            <Button size="lg" className="w-full text-lg py-6 group" asChild>
-              <a href="https://calendly.com/brian-niwoyda/30min" target="_blank" rel="noopener noreferrer">
-                Quiero agendar llamada
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </a>
+            <Button
+                size="lg"
+                className="text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-6 group w-full sm:w-auto"
+                onClick={handleGoToForm}
+              >
+              QUIERO AGENDAR UNA LLAMADA
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
 

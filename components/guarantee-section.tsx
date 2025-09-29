@@ -1,7 +1,16 @@
+﻿"use client"
+
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Shield, ArrowRight } from "lucide-react"
 
 export function GuaranteeSection() {
+  const router = useRouter()
+
+  const handleGoToForm = () => {
+    router.push("/formulario")
+  }
+
   return (
     <section id="garantia" className="scroll-mt-24 py-20 bg-gradient-to-r from-primary/10 via-background to-primary/5">
       <div className="container mx-auto px-4">
@@ -12,13 +21,13 @@ export function GuaranteeSection() {
             </div>
 
             <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-              Si no tienes tu <span className="text-primary">AGENTE IA</span> funcionando en los primeros 14 días
+              Si no tienes tu <span className="text-primary">AGENTE IA</span> funcionando en los primeros 14 dias
             </h2>
 
             <div className="bg-card border border-border rounded-2xl p-8 mb-8">
               <h3 className="text-2xl lg:text-3xl font-bold text-primary mb-4">Te devolvemos el 100% de tu dinero</h3>
               <p className="text-lg text-muted-foreground">
-                Confiamos tanto en la calidad de nuestro servicio que te damos una garantía total.
+                Confiamos tanto en la calidad de nuestro servicio que te damos una garantia total.
               </p>
             </div>
 
@@ -30,21 +39,11 @@ export function GuaranteeSection() {
           </div>
 
           <div className="space-y-4">
-            <Button size="lg" className="text-lg px-8 py-6 group" asChild>
-              <a href="https://calendly.com/brian-niwoyda/30min" target="_blank" rel="noopener noreferrer">
-                CREA TU EQUIPO COMERCIAL AHORA SIN RIESGOS
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </a>
+            <Button size="lg" className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-6 group text-center whitespace-normal break-words" onClick={handleGoToForm}>
+              CREA TU EQUIPO COMERCIAL AHORA SIN RIESGOS
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <p className="text-sm text-muted-foreground">Agenda llamada AHORA</p>
-          </div>
-
-          <div className="mt-12">
-            <img
-              src="/100--money-back-guarantee-badge-with-shield-and-ch.jpg"
-              alt="Garantía de devolución del 100%"
-              className="mx-auto rounded-xl shadow-lg"
-            />
           </div>
         </div>
       </div>
