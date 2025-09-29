@@ -66,7 +66,7 @@ export function FAQSection() {
           </Accordion>
 
           <div className="text-center space-y-4">
-            <Button size="lg" className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 group text-center whitespace-normal break-words" onClick={handleGoToForm}>
+            <Button size="lg" className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py6 group text-center whitespace-normal break-words" onClick={handleGoToForm}>
               CREA TU EQUIPO AHORA
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
