@@ -1,89 +1,78 @@
 ﻿"use client"
 
-import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Clock, Mic, Target } from "lucide-react"
 
-
 export function Hero() {
-  const router = useRouter()
-
-  const handleGoToForm = () => {
-    router.push("/formulario")
-  }
-  
   return (
-    <section id="inicio" className="relative scroll-mt-24 overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10 pt-24 md:pt-28 lg:pt-32 pb-8 md:pb-12 lg:pb-20">
+    <section id="inicio" className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10 pt-16 md:pt-20 lg:pt-24 pb-12">
       {/* Background decoration */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-grid-pattern opacity-5" />
 
-      <div className="container mx-auto px-3 md:px-4 max-w-7xl">
-        <div className="flex justify-center mb-6 md:mb-8 lg:mb-12">
-          <img
-            src="/briax-logo.png"
-            alt="BrIAx - Agentes IA Comerciales"
-            className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto"
-          />
+      <div className="container mx-auto max-w-6xl px-4">
+        <div className="mb-8 flex justify-center lg:mb-10">
+          <img src="/briax-logo.png" alt="BrIAx - Agentes IA Comerciales" className="h-16 w-auto sm:h-20 lg:h-24" />
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div className="space-y-6 md:space-y-8">
-            <div className="space-y-4 md:space-y-6">
-              <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-balance leading-tight">
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+          <div className="flex flex-col items-center gap-6 text-center">
+            <div className="space-y-4">
+              <h1 className="text-balance text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
                 <span className="text-foreground">Tu agente de voz IA</span>{" "}
                 <span className="text-primary">conversa y vende</span>{" "}
                 <span className="text-foreground">sin ampliar tu equipo</span>
               </h1>
 
-              <p className="text-lg sm:text-xl md:text-xl lg:text-2xl text-muted-foreground text-pretty leading-relaxed">
+              <p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl lg:text-2xl">
                 Entregamos un asistente de voz que atiende 24/7, responde dudas y agenda reuniones con leads listos para comprar.
               </p>
             </div>
 
-            <div className="flex flex-col gap-3 md:gap-4">
-              <Button size="lg" className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-6 group text-center whitespace-normal break-words" onClick={handleGoToForm}>
-                CREA TU EQUIPO COMERCIAL AHORA SIN RIESGOS
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            <div className="flex flex-col items-center gap-3">
+              <Button size="lg" className="group px-6 py-4 text-base sm:px-8 sm:py-5 sm:text-lg" asChild>
+                <Link href="/formulario" className="inline-flex items-center gap-2">
+                  Quiero agendar llamada
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 sm:h-5 sm:w-5" />
+                </Link>
               </Button>
-              <p className="text-xs md:text-sm text-muted-foreground text-center sm:text-left">
-                Para lanzar mi agente de voz que venda por mi
-              </p>
+              <p className="text-xs text-muted-foreground sm:text-sm">Para lanzar mi agente de voz que venda por mi</p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 pt-2 md:pt-4">
+            <div className="flex flex-col items-center gap-3 pt-2 sm:flex-row sm:gap-6">
               <div className="flex items-center gap-2">
-                <Mic className="h-4 w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
-                <span className="text-xs md:text-sm font-medium">Voz natural en tiempo real</span>
+                <Mic className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
+                <span className="text-xs font-medium sm:text-sm">Voz natural en tiempo real</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
-                <span className="text-xs md:text-sm font-medium">Atiende 24/7 por voz</span>
+                <Clock className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
+                <span className="text-xs font-medium sm:text-sm">Atiende 24/7 por voz</span>
               </div>
               <div className="flex items-center gap-2">
-                <Target className="h-4 w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
-                <span className="text-xs md:text-sm font-medium">Convierte llamadas en ventas</span>
+                <Target className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
+                <span className="text-xs font-medium sm:text-sm">Convierte llamadas en ventas</span>
               </div>
             </div>
           </div>
 
-          <div className="relative mt-8 lg:mt-0">
-            <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl md:shadow-2xl">
+          <div className="relative mx-auto max-w-xl lg:mx-0">
+            <div className="relative overflow-hidden rounded-2xl shadow-xl">
               <img
                 src="/ai-agents-working-commercial-interfaces.png"
                 alt="Agente de voz IA gestionando conversaciones comerciales"
-                className="w-full h-auto"
+                className="h-auto w-full"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/25 to-transparent" />
             </div>
 
-            <div className="absolute -bottom-3 -left-3 md:-bottom-6 md:-left-6 bg-card border border-border rounded-lg md:rounded-xl p-2 md:p-4 shadow-lg">
-              <div className="text-lg md:text-2xl font-bold text-primary">+65%</div>
-              <div className="text-xs md:text-sm text-muted-foreground">Citas confirmadas</div>
+            <div className="absolute -bottom-4 -left-4 hidden rounded-xl border border-border bg-card p-4 text-left shadow-lg sm:block">
+              <div className="text-xl font-bold text-primary">+65%</div>
+              <div className="text-sm text-muted-foreground">Citas confirmadas</div>
             </div>
 
-            <div className="absolute -top-3 -right-3 md:-top-6 md:-right-6 bg-card border border-border rounded-lg md:rounded-xl p-2 md:p-4 shadow-lg">
-              <div className="text-lg md:text-2xl font-bold text-primary">24/7</div>
-              <div className="text-xs md:text-sm text-muted-foreground">Disponible por voz</div>
+            <div className="absolute -top-4 -right-4 hidden rounded-xl border border-border bg-card p-4 text-left shadow-lg sm:block">
+              <div className="text-xl font-bold text-primary">24/7</div>
+              <div className="text-sm text-muted-foreground">Disponible por voz</div>
             </div>
           </div>
         </div>
