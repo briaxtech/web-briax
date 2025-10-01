@@ -1,8 +1,9 @@
-"use client"
+﻿"use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { ArrowLeft, ArrowRight, Calendar, CheckCircle } from "lucide-react"
 
@@ -242,6 +243,7 @@ function validateQuestion(question: QuestionConfig, value: string, data: FormDat
 }
 
 export default function FormularioPage() {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(-1)
   const [formData, setFormData] = useState<FormData>(() => createInitialFormData())
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -336,7 +338,7 @@ export default function FormularioPage() {
     }
 
     console.log("Form submitted:", submissionData)
-    setIsSubmitted(true)
+    router.push("/agradecimiento")
   }
 
   const updateFormData = (field: keyof FormData, value: string) => {
@@ -669,3 +671,5 @@ export default function FormularioPage() {
 
   return renderQuestionStep()
 }
+
+
