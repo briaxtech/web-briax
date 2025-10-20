@@ -17,12 +17,25 @@ export function Hero() {
 
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <div className="flex flex-col items-center gap-6 text-center">
-            <div className="space-y-4">
+            <div className="space-y-6">
               <h1 className="text-balance text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
                 <span className="text-foreground">Tu agente de voz IA</span>{" "}
                 <span className="text-primary">conversa y vende</span>{" "}
                 <span className="text-foreground">sin ampliar tu equipo</span>
               </h1>
+
+              <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-border/50 shadow-lg">
+                <div className="aspect-video w-full bg-muted">
+                  <iframe
+                    className="h-full w-full"
+                    src="https://www.youtube.com/embed/LA6VhPiwuwg?rel=0"
+                    title="Briax agente de voz IA"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                </div>
+              </div>
 
               <p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl lg:text-2xl">
                 Entregamos un asistente de voz que atiende 24/7, responde dudas y agenda reuniones con leads listos para comprar.
