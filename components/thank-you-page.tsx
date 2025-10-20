@@ -42,15 +42,14 @@ export function ThankYouPage() {
 
           <div className="mb-8 overflow-hidden rounded-3xl border border-border/50 shadow-lg">
             <div className="aspect-video w-full bg-muted">
-              <div className="flex h-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-primary/20 to-primary/5">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20">
-                  <svg className="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-                <p className="text-sm text-muted-foreground">Inserta tu video aqui</p>
-                <p className="text-xs text-muted-foreground">(Reemplaza este placeholder con tu video BSL)</p>
-              </div>
+              <iframe
+                className="h-full w-full"
+                src="https://www.youtube.com/embed/Y_KSz98o7io?rel=0"
+                title="Mensaje de agradecimiento Briax"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                loading="lazy"
+              />
             </div>
           </div>
 
