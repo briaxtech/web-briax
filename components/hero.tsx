@@ -15,7 +15,7 @@ export function Hero() {
           <img src="/briax-logo.png" alt="BrIAx - Agentes IA Comerciales" className="h-16 w-auto sm:h-20 lg:h-24" />
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+        <div className="grid gap-12">
           <div className="flex flex-col items-center gap-6 text-center">
             <div className="space-y-6">
               <h1 className="text-balance text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
@@ -68,7 +68,7 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="relative mx-auto max-w-xl lg:mx-0">
+          <div className="relative mx-auto max-w-xl">
             <div className="relative overflow-hidden rounded-2xl shadow-xl">
               <img
                 src="/ai-agents-working-commercial-interfaces.png"
