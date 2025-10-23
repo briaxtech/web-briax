@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
+import { THANK_YOU_ACCESS_COOKIE, THANK_YOU_ACCESS_MAX_AGE, setClientCookie } from "@/lib/cookies"
 
 type QuestionType = "text" | "email" | "phone" | "textarea" | "radio"
 
@@ -338,6 +339,7 @@ export default function FormularioPage() {
     }
 
     console.log("Form submitted:", submissionData)
+    setClientCookie(THANK_YOU_ACCESS_COOKIE, "granted", THANK_YOU_ACCESS_MAX_AGE)
     router.push("/agradecimiento")
   }
 

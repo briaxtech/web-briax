@@ -1,7 +1,7 @@
 ﻿"use client"
 
 import Image from "next/image"
-import { Calendar, CheckCircle2, ArrowDownRight } from "lucide-react"
+import { Calendar, CheckCircle2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -92,10 +92,6 @@ export function ThankYouPage() {
           <p className="text-sm text-muted-foreground">Copyright 2025 BrIAx Technologies</p>
         </div>
       </footer>
-      <div className="pointer-events-none fixed bottom-32 right-28 z-40 max-w-xs flex gap-2 rounded-2xl border border-border/60 bg-card px-4 py-3 text-left shadow-xl sm:flex lg:right-36">
-        <p className="text-sm font-semibold text-foreground">Prueba nuestra demo!</p>
-        <ArrowDownRight className="ml-auto h-8 w-8 text-primary animate-bounce" />
-      </div>
       <ElevenLabsVoiceAgent />
     </div>
   )
