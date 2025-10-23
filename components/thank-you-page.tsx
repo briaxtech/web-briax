@@ -65,20 +65,6 @@ export function ThankYouPage() {
             </CardContent>
           </Card>
 
-          <div className="space-y-4">
-            <p className="text-center text-sm font-medium text-foreground">Guarda esta cita en tu calendario:</p>
-            <div className="flex justify-center">
-              <Button
-                onClick={handleGoogleCalendar}
-                size="lg"
-                className="gap-2 bg-primary font-medium text-primary-foreground hover:bg-primary/90"
-              >
-                <Calendar className="h-5 w-5" />
-                Agregar a Google Calendar
-              </Button>
-            </div>
-          </div>
-
           <div className="mt-12 text-center">
             <p className="text-sm text-muted-foreground">
               Recibiras un correo de confirmacion con todos los detalles de la llamada.
