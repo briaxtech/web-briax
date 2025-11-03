@@ -249,6 +249,8 @@ export default function FormularioPage() {
   const [formData, setFormData] = useState<FormData>(() => createInitialFormData())
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [currentError, setCurrentError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const visibleQuestions = useMemo(() => {
     return questions.filter((question) => {
@@ -288,9 +290,15 @@ export default function FormularioPage() {
     setCurrentStep(-1)
     setIsSubmitted(false)
     setCurrentError(null)
+    setSubmitError(null)
+    setIsSubmitting(false)
   }, [])
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    if (isSubmitting) {
+      return
+    }
+
     if (currentStep === -1) {
       setCurrentError(null)
       setCurrentStep(0)
@@ -310,12 +318,17 @@ export default function FormularioPage() {
     }
 
     if (isCalendlyStep) {
-      handleSubmit()
+      await handleSubmit()
     }
   }
 
   const handlePrevious = () => {
+    if (isSubmitting) {
+      return
+    }
+
     setCurrentError(null)
+    setSubmitError(null)
 
     if (currentStep === -1) {
       return
@@ -329,18 +342,36 @@ export default function FormularioPage() {
     setCurrentStep((prev) => Math.max(-1, prev - 1))
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setCurrentError(null)
+    setSubmitError(null)
+    setIsSubmitting(true)
 
-    const submissionData = {
-      ...formData,
-      isHighPriority: isHighPriorityLead(),
-      submittedAt: new Date().toISOString(),
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        const errorPayload = await response.json().catch(() => null)
+        const message =
+          errorPayload && typeof errorPayload.error === "string"
+            ? errorPayload.error
+            : "No pudimos enviar tu solicitud. Intenta nuevamente en unos segundos."
+        setSubmitError(message)
+        return
+      }
+
+      setClientCookie(THANK_YOU_ACCESS_COOKIE, "granted", THANK_YOU_ACCESS_MAX_AGE)
+      router.push("/agradecimiento")
+    } catch (error) {
+      console.error("Error enviando formulario:", error)
+      setSubmitError("Tuvimos un inconveniente al enviar tu solicitud. Por favor, revisa tu conexión e intentalo otra vez.")
+    } finally {
+      setIsSubmitting(false)
     }
-
-    console.log("Form submitted:", submissionData)
-    setClientCookie(THANK_YOU_ACCESS_COOKIE, "granted", THANK_YOU_ACCESS_MAX_AGE)
-    router.push("/agradecimiento")
   }
 
   const updateFormData = (field: keyof FormData, value: string) => {
@@ -568,12 +599,18 @@ export default function FormularioPage() {
                   <Button
                     size="lg"
                     onClick={handleNext}
-                    className="group w-full rounded-xl bg-violet-600 px-8 py-4 text-lg text-white shadow-lg transition-all duration-300 hover:bg-violet-700 hover:shadow-xl sm:w-auto"
+                    disabled={isSubmitting}
+                    className="group w-full rounded-xl bg-violet-600 px-8 py-4 text-lg text-white shadow-lg transition-all duration-300 hover:bg-violet-700 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                   >
-                    Ya agende mi demo
+                    {isSubmitting ? "Enviando..." : "Ya agende mi demo"}
                     <CheckCircle className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </div>
+                {submitError && (
+                  <p className="text-sm font-medium text-red-600" role="alert" aria-live="assertive">
+                    {submitError}
+                  </p>
+                )}
               </CardContent>
             </Card>
           </motion.div>
