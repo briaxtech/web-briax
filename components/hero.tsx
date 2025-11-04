@@ -3,8 +3,11 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Clock, Mic, Target } from "lucide-react"
+import { useSeller } from "@/hooks/use-seller"
 
 export function Hero() {
+  const { formPath } = useSeller()
+
   return (
     <section id="inicio" className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10 pt-16 md:pt-20 lg:pt-24 pb-12">
       {/* Background decoration */}
@@ -44,7 +47,7 @@ export function Hero() {
 
             <div className="flex flex-col items-center gap-3">
               <Button size="lg" className="group px-6 py-4 text-base sm:px-8 sm:py-5 sm:text-lg" asChild>
-                <Link href="/formulario" className="inline-flex items-center gap-2">
+                <Link href={formPath} className="inline-flex items-center gap-2">
                   Quiero agendar llamada
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 sm:h-5 sm:w-5" />
                 </Link>

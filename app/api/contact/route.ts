@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 
 import { FUUNEL_LABEL, resend } from "@/lib/resend"
+import { getSellerBySlug } from "@/lib/sellers"
+import type { SellerConfig } from "@/lib/sellers"
 
 const escapeHtml = (value: string) =>
   value
@@ -37,6 +39,15 @@ const leadSchema = z.object({
     .transform((value) => (value ?? "").trim()),
 })
 
+const payloadSchema = leadSchema.extend({
+  seller_slug: z
+    .string()
+    .trim()
+    .min(1, "Seller slug invalido")
+    .max(64, "Seller slug demasiado largo")
+    .optional(),
+})
+
 const leadFieldLabels: Record<keyof z.infer<typeof leadSchema>, string> = {
   name: "Nombre",
   email: "Email",
@@ -62,9 +73,53 @@ const getFromAddress = () => {
   return value
 }
 
-const getToAddress = () => process.env.RESEND_NOTIFICATION_TO?.trim() || "briaxtech@gmail.com"
+const getArgentinaAddress = () => process.env.RESEND_NOTIFICATION_TO_AR?.trim()
 
-const renderHtmlEmail = (lead: z.infer<typeof leadSchema>, submittedAt: string, isHighPriority: boolean) => {
+const getToAddress = ({ seller, countryCode }: { seller?: SellerConfig | null; countryCode?: string }) => {
+  const sellerEmail = seller?.notificationEmail?.trim()
+  if (sellerEmail) {
+    return sellerEmail
+  }
+
+  if (countryCode === "AR") {
+    const argentinaAddress = getArgentinaAddress()
+    if (argentinaAddress) {
+      return argentinaAddress
+    }
+  }
+
+  return process.env.RESEND_NOTIFICATION_TO?.trim() || "briaxtech@gmail.com"
+}
+
+const getCountryCode = (request: Request) => {
+  const headerCountry =
+    request.headers.get("x-vercel-ip-country") ?? request.headers.get("cf-ipcountry") ?? request.headers.get("x-country")
+
+  return headerCountry?.trim().toUpperCase()
+}
+
+const formatSellerDisplay = (seller: SellerConfig | null, sellerSlug: string | null) => {
+  if (seller) {
+    return seller.name
+  }
+
+  if (!sellerSlug) {
+    return "Equipo general"
+  }
+
+  return sellerSlug
+    .split("-")
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ")
+}
+
+const renderHtmlEmail = (
+  lead: z.infer<typeof leadSchema>,
+  submittedAt: string,
+  isHighPriority: boolean,
+  sellerDisplay: string,
+) => {
   const rows = Object.entries(leadFieldLabels)
     .map(([field, label]) => {
       const rawValue = lead[field as keyof typeof lead] || ""
@@ -76,6 +131,11 @@ const renderHtmlEmail = (lead: z.infer<typeof leadSchema>, submittedAt: string, 
     })
     .join("")
 
+  const sellerRow = `<tr>
+        <td style="padding:8px 12px;border-bottom:1px solid #eee;font-weight:600;color:#111;">Vendedor asignado</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #eee;color:#1f2933;">${escapeHtml(sellerDisplay)}</td>
+      </tr>`
+
   return `
     <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
       <h1 style="font-size:20px;color:#111;margin-bottom:4px;">${FUUNEL_LABEL} Nueva solicitud de demo</h1>
@@ -85,6 +145,7 @@ const renderHtmlEmail = (lead: z.infer<typeof leadSchema>, submittedAt: string, 
       <table style="width:100%;border-collapse:collapse;background-color:#ffffff;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
         <tbody>
           ${rows}
+          ${sellerRow}
           <tr>
             <td style="padding:8px 12px;font-weight:600;color:#111;">Prioridad</td>
             <td style="padding:8px 12px;color:${isHighPriority ? "#7c3aed" : "#1f2933"};">${
@@ -101,7 +162,12 @@ const renderHtmlEmail = (lead: z.infer<typeof leadSchema>, submittedAt: string, 
   `
 }
 
-const renderTextEmail = (lead: z.infer<typeof leadSchema>, submittedAt: string, isHighPriority: boolean) => {
+const renderTextEmail = (
+  lead: z.infer<typeof leadSchema>,
+  submittedAt: string,
+  isHighPriority: boolean,
+  sellerDisplay: string,
+) => {
   const header = `${FUUNEL_LABEL} Nueva solicitud de demo${isHighPriority ? " (Prioridad alta)" : ""}`
 
   const body = Object.entries(leadFieldLabels)
@@ -115,6 +181,7 @@ const renderTextEmail = (lead: z.infer<typeof leadSchema>, submittedAt: string, 
 
 ${body}
 
+Vendedor asignado: ${sellerDisplay}
 Prioridad: ${isHighPriority ? "Alta" : "Regular"}
 Fecha de envío: ${submittedAt}
 `
@@ -122,30 +189,40 @@ Fecha de envío: ${submittedAt}
 
 export async function POST(request: Request) {
   try {
-    const payload = leadSchema.parse(await request.json())
+    const payload = payloadSchema.parse(await request.json())
+    const { seller_slug: sellerSlugValue, ...lead } = payload
+    const sellerSlug = sellerSlugValue ? sellerSlugValue.toLowerCase() : null
+    const seller = sellerSlug ? getSellerBySlug(sellerSlug) : null
+    const sellerDisplay = formatSellerDisplay(seller, sellerSlug)
+    const sellerTagValue = seller?.slug ?? sellerSlug ?? "general"
 
     const submittedAt = new Date().toISOString()
     const isHighPriority =
-      payload.decision_timeline === "inmediato" || payload.budget_for_solution === ">20000"
-    const displayName = sanitizeHeaderValue(payload.name)
+      lead.decision_timeline === "inmediato" || lead.budget_for_solution === ">20000"
+    const displayName = sanitizeHeaderValue(lead.name)
 
     const from = getFromAddress()
+    const countryCode = getCountryCode(request)
+    const toAddress = getToAddress({ seller, countryCode })
+    const subjectSellerSuffix = sellerTagValue !== "general" ? ` [${sellerDisplay}]` : ""
+    const subject = `${FUUNEL_LABEL}${subjectSellerSuffix} Nueva solicitud de ${displayName}`
 
     const { error } = await resend.emails.send({
       from,
-      to: [getToAddress()],
-      replyTo: payload.email,
-      subject: `${FUUNEL_LABEL} Nueva solicitud de ${displayName}`,
-      html: renderHtmlEmail(payload, submittedAt, isHighPriority),
-      text: renderTextEmail(payload, submittedAt, isHighPriority),
+      to: [toAddress],
+      replyTo: lead.email,
+      subject,
+      html: renderHtmlEmail(lead, submittedAt, isHighPriority, sellerDisplay),
+      text: renderTextEmail(lead, submittedAt, isHighPriority, sellerDisplay),
       tags: [
         { name: "workspace", value: "fuunel" },
         { name: "priority", value: isHighPriority ? "high" : "normal" },
+        { name: "seller", value: sellerTagValue },
       ],
     })
 
     if (error) {
-      console.error("Error enviando email con Resend:", error)
+      console.error("Error enviando email con Resend:", { error, sellerSlug, toAddress, countryCode })
       return NextResponse.json(
         { error: "No pudimos enviar el email. Intenta nuevamente en unos segundos." },
         { status: 502 },

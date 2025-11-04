@@ -3,12 +3,14 @@
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import { useSeller } from "@/hooks/use-seller"
 
 export function BenefitsSection() {
   const router = useRouter()
+  const { formPath } = useSeller()
 
   const handleGoToForm = () => {
-    router.push("/formulario")
+    router.push(formPath)
   }
 
   return (

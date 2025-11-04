@@ -15,6 +15,7 @@ import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { THANK_YOU_ACCESS_COOKIE, THANK_YOU_ACCESS_MAX_AGE, setClientCookie } from "@/lib/cookies"
+import { useSeller } from "@/hooks/use-seller"
 
 type QuestionType = "text" | "email" | "phone" | "textarea" | "radio"
 
@@ -171,7 +172,7 @@ const createInitialFormData = (): FormData => ({
   how_found: "",
 })
 
-const calendlySchedulingUrl = "https://calendly.com/brian-niwoyda/30min"
+const DEFAULT_CALENDLY_URL = "https://calendly.com/brian-niwoyda/30min"
 const calendlyFrameHeight = 820
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const phoneRegex = /^[+]?[0-9\s-]{8,20}$/
@@ -245,6 +246,8 @@ function validateQuestion(question: QuestionConfig, value: string, data: FormDat
 
 export default function FormularioPage() {
   const router = useRouter()
+  const { seller, slugParam, thankYouPath, landingPath } = useSeller()
+  const calendlySchedulingUrl = seller.calendlyUrl || DEFAULT_CALENDLY_URL
   const [currentStep, setCurrentStep] = useState(-1)
   const [formData, setFormData] = useState<FormData>(() => createInitialFormData())
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -348,10 +351,15 @@ export default function FormularioPage() {
     setIsSubmitting(true)
 
     try {
+      const payload = {
+        ...formData,
+        ...(slugParam ? { seller_slug: slugParam } : {}),
+      }
+
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       })
 
       if (!response.ok) {
@@ -365,7 +373,7 @@ export default function FormularioPage() {
       }
 
       setClientCookie(THANK_YOU_ACCESS_COOKIE, "granted", THANK_YOU_ACCESS_MAX_AGE)
-      router.push("/agradecimiento")
+      router.push(thankYouPath)
     } catch (error) {
       console.error("Error enviando formulario:", error)
       setSubmitError("Tuvimos un inconveniente al enviar tu solicitud. Por favor, revisa tu conexión e intentalo otra vez.")
@@ -656,7 +664,7 @@ export default function FormularioPage() {
                   Completar otra solicitud
                 </Button>
                 <Button asChild variant="outline" size="lg" className="rounded-xl px-8 py-4 text-lg">
-                  <Link href="/">Volver al inicio</Link>
+                  <Link href={landingPath}>Volver al inicio</Link>
                 </Button>
               </div>
             </CardContent>

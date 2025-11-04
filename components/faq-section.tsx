@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { useSeller } from "@/hooks/use-seller"
 
 export function FAQSection() {
   const router = useRouter()
+  const { formPath } = useSeller()
 
   const handleGoToForm = () => {
-    router.push("/formulario")
+    router.push(formPath)
   }
 
   return (
