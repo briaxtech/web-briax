@@ -1,7 +1,6 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState, type DetailedHTMLProps, type HTMLAttributes } from "react"
-import Script from "next/script"
 import { ArrowDownRight } from "lucide-react"
 
 import {
@@ -12,8 +11,7 @@ import {
   setClientCookie,
 } from "@/lib/cookies"
 
-const GO_HIGH_LEVEL_AGENT_ID =
-  process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID ?? "agent_9701k97j5dkaeqjba3rv8x1xfgys"
+const GO_HIGH_LEVEL_AGENT_ID = "agent_9701k97j5dkaeqjba3rv8x1xfgys"
 const LIMIT_REACHED_MESSAGE = `Has alcanzado el limite de ${VOICE_AGENT_MAX_USES} usos del chat de voz. Si necesitas mas ayuda, contacta a nuestro equipo.`
 const LIMIT_WARNING_MESSAGE = "Te queda 1 ultimo intento para usar el chat de voz. Despues quedara bloqueado."
 
@@ -265,7 +263,7 @@ export function ElevenLabsVoiceAgent() {
     <>
       <div className="pointer-events-none fixed bottom-32 right-28 z-40 max-w-xs flex gap-2 rounded-2xl border border-border/60 bg-card px-4 py-3 text-left shadow-xl backdrop-blur-sm lg:right-36">
         <div className="flex flex-1 flex-col gap-1">
-          <p className="text-sm font-semibold text-foreground">Prueba nuestra demo!</p>
+          <p className="text-sm font-semibold text-foreground">Proba nuestro agente de IA demo!</p>
           <p className={`text-xs ${attemptsLabelClass}`}>{attemptsLabel}</p>
         </div>
         <ArrowDownRight className="h-8 w-8 text-primary animate-bounce" />
@@ -284,12 +282,7 @@ export function ElevenLabsVoiceAgent() {
         <span className="sr-only">Te queda una sola oportunidad para usar el chat de voz.</span>
       ) : null}
 
-      <Script
-        src="https://unpkg.com/@elevenlabs/convai-widget-embed"
-        async
-        type="text/javascript"
-        strategy="afterInteractive"
-      />
+      <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
     </>
   )
 }
