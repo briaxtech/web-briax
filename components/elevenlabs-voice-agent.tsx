@@ -12,7 +12,8 @@ import {
   setClientCookie,
 } from "@/lib/cookies"
 
-const GO_HIGH_LEVEL_AGENT_ID = "agent_6301k5yme1dgf81ae2yf1esmnqnv"
+const GO_HIGH_LEVEL_AGENT_ID =
+  process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID ?? "agent_9701k97j5dkaeqjba3rv8x1xfgys"
 const LIMIT_REACHED_MESSAGE = `Has alcanzado el limite de ${VOICE_AGENT_MAX_USES} usos del chat de voz. Si necesitas mas ayuda, contacta a nuestro equipo.`
 const LIMIT_WARNING_MESSAGE = "Te queda 1 ultimo intento para usar el chat de voz. Despues quedara bloqueado."
 
